@@ -1,6 +1,6 @@
 # mos_消散 / mos_dissolve
 
-EffectCraft 文字与图层粒子消散外部效果助手（`mos.dissolve`，分组 `MOS 视效` / `MOS VFX`，支持自动画布扩展 `padding` 与自定义遮罩图层 `layer_input`）。
+EffectCraft 文字与图层粒子消散外部效果助手（`mos.dissolve`，分组 `MOS 效果` / `MOS Effects`，支持自动画布扩展 `padding` 与自定义遮罩图层 `layer_input`）。
 
 ## 核心特性
 

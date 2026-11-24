@@ -80,7 +80,7 @@ pub fn manifest() -> serde_json::Value {
         "api": 2,
         "id": "mos.dissolve",
         "name": "mos_消散",
-        "category": "MOS 视效",
+        "category": "MOS 效果",
         "version": "1.0.0",
         "author": "MOSSLS",
         "description": "文字与图层粒子消散效果：支持 0–100% 消散进度与三种遮罩（线性、杂色、自定义图层），自动读取文字本像素或重叠像素颜色，提供「粒子生成」与「像素分离」双模式，结合风力、重力、湍流卷曲与存活时间尺寸/透明度/颜色渐变自然消散。",

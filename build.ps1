@@ -51,5 +51,5 @@ Copy-Item (Join-Path $here 'tools\mos-load-helpers.jsx') (Join-Path $startup 'mo
 
 Write-Host ''
 Write-Host "完成：$helpersDir\effectcraft-helper-mos-dissolve.exe"
-Write-Host '重启 EffectCraft 后，效果列表「MOS 视效」分类下会自动加载 mos_消散 v1.0.0。'
+Write-Host '重启 EffectCraft 后，效果列表「MOS 效果」分类下会自动加载 mos_消散 v1.0.0。'
 Write-Host '（当前已开着的窗口：执行一次 效果 ▸ 扫描效果辅助程序... 即可立刻加载）'
