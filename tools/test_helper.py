@@ -76,30 +76,30 @@ class Helper:
 def make_params(**overrides):
     # Matches flat indices 0..35 in helper/src/dissolve.rs
     defaults = [
-        0.0, 35.0, 18.0, 45.0, 35.0,                    # 0..4: dissolve
-        0.0, 0.0, 15.0, 80.0, -1.0, 0.0, 0.0,           # 5..11: mask
-        55.0, 3.2, 50.0, 0.0, 1.0,                      # 12..16: particles & pixels
-        -15.0, 160.0, -25.0, 45.0, 55.0, 75.0, 45.0,    # 17..23: wind & physics
-        0.0, 25.0, 0.0, 1.0, 0.55, 0.2, 1.0, 75.0, 0.0, # 24..32: lifetime & color (27..30 = end_color RGBA)
-        1.0, 20.0, 100.0,                               # 33..35: output
+        0.0, 35.0, 18.0, 0.0,                           # 0..3: top-level dissolve
+        0.0, 0.0, 15.0, 80.0, -1.0, 0.0,                # 4..9: mask & subgroups
+        55.0, 3.2, 50.0, 0.0, 1.0,                      # 10..14: particles & pixels
+        -15.0, 160.0, -25.0, 45.0, 45.0, 55.0, 75.0, 20.0,  # 15..22: wind & curl turbulence
+        45.0, 35.0, 0.0, 25.0, 0.0, 1.0, 0.55, 0.2, 1.0, 75.0, 0.0,  # 23..33: lifetime & end color (28..31)
+        1.0, 100.0,                                     # 34..35: output
     ]
     idx = {
-        "mode": 0, "progress": 1, "feather": 2, "lifetime": 3, "life_random": 4,
-        "mask_type": 5, "mask_angle": 6, "mask_jitter": 7, "noise_scale": 8,
-        "mask_layer": 9, "mask_channel": 10, "mask_invert": 11,
-        "particle_density": 12, "particle_size": 13, "size_random": 14,
-        "particle_shape": 15, "pixel_block": 16,
-        "wind_angle": 17, "wind_strength": 18, "gravity": 19, "scatter": 20,
-        "turbulence_amp": 21, "turbulence_scale": 22, "speed_random": 23,
-        "fade_out_curve": 24, "size_over_life": 25, "color_fade_enable": 26,
-        "end_color_r": 27, "end_color_g": 28, "end_color_b": 29, "end_color_a": 30,
-        "color_fade_mix": 31, "additive_glow": 32,
-        "seed": 33, "time_evolve": 34, "mix": 35,
+        "mode": 0, "progress": 1, "feather": 2, "mask_type": 3,
+        "mask_invert": 4, "mask_angle": 5, "mask_jitter": 6, "noise_scale": 7,
+        "mask_layer": 8, "mask_channel": 9,
+        "particle_density": 10, "particle_size": 11, "size_random": 12,
+        "particle_shape": 13, "pixel_block": 14,
+        "wind_angle": 15, "wind_strength": 16, "gravity": 17, "scatter": 18,
+        "speed_random": 19, "turbulence_amp": 20, "turbulence_scale": 21, "time_evolve": 22,
+        "lifetime": 23, "life_random": 24, "fade_out_curve": 25, "size_over_life": 26,
+        "color_fade_enable": 27, "end_color_r": 28, "end_color_g": 29, "end_color_b": 30,
+        "end_color_a": 31, "color_fade_mix": 32, "additive_glow": 33,
+        "seed": 34, "mix": 35,
     }
     p = list(defaults)
     for k, v in overrides.items():
         if k == "end_color":
-            p[27], p[28], p[29], p[30] = [float(c) for c in v]
+            p[28], p[29], p[30], p[31] = [float(c) for c in v]
         else:
             p[idx[k]] = float(v)
     return p
@@ -304,8 +304,16 @@ def main():
         assert eff_en["manifest"]["id"] == EFFECT
         assert eff_en["manifest"]["category"] == "MOS VFX"
         assert eff_en["manifest"]["name"] == "mos_dissolve"
+        en_by_id = {p["id"]: p for p in eff_en["manifest"]["params"]}
+        assert en_by_id["progress"].get("group", "") == ""
+        assert en_by_id["mask_angle"]["group"] == "Mask/Linear"
+        assert en_by_id["mask_layer"]["group"] == "Mask/Custom Layer"
+        assert en_by_id["particle_size"]["group"] == "Particles & Pixels/Particle Emit"
+        assert en_by_id["pixel_block"]["group"] == "Particles & Pixels/Pixel Separation"
+        assert en_by_id["turbulence_amp"]["group"] == "Wind & Physics/Curl Turbulence"
+        assert en_by_id["end_color"]["group"] == "Lifetime & Fade/End Color"
         h_en.close()
-        print("[OK] EN bilingual manifest verified")
+        print("[OK] EN bilingual manifest & 2-level group paths verified")
 
         # 2. Main ZH session
         helper = Helper(exe, env_extra={"MOS_LANG": "zh"})
@@ -317,7 +325,15 @@ def main():
         eff_zh = r_desc["effects"][0]
         assert eff_zh["manifest"]["category"] == "MOS 视效"
         assert eff_zh["manifest"]["name"] == "mos_消散"
-        print(f"[OK] ZH manifest verified ({len(eff_zh['manifest']['params'])} params)")
+        zh_by_id = {p["id"]: p for p in eff_zh["manifest"]["params"]}
+        assert zh_by_id["progress"].get("group", "") == ""
+        assert zh_by_id["mask_angle"]["group"] == "遮罩/线性"
+        assert zh_by_id["mask_layer"]["group"] == "遮罩/自定义图层"
+        assert zh_by_id["particle_size"]["group"] == "粒子与像素/粒子生成"
+        assert zh_by_id["pixel_block"]["group"] == "粒子与像素/像素分离"
+        assert zh_by_id["turbulence_amp"]["group"] == "风场与物理/湍流卷曲"
+        assert zh_by_id["end_color"]["group"] == "寿命与渐变/尾端色彩"
+        print(f"[OK] ZH manifest & 2-level group paths verified ({len(eff_zh['manifest']['params'])} params)")
 
         # 3. Check Padding
         helper.send({

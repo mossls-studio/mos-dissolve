@@ -17,48 +17,48 @@
 use std::f32::consts::{PI, TAU};
 use std::thread;
 
-// Flat parameter indices (note: `end_color` is a 4-float RGBA color occupying indices 27..=30).
+// Flat parameter indices (note: `end_color` is a 4-float RGBA color occupying indices 28..=31).
 pub const I_MODE: usize = 0;
 pub const I_PROGRESS: usize = 1;
 pub const I_FEATHER: usize = 2;
-pub const I_LIFETIME: usize = 3;
-pub const I_LIFE_RANDOM: usize = 4;
+pub const I_MASK_TYPE: usize = 3;
 
-pub const I_MASK_TYPE: usize = 5;
-pub const I_MASK_ANGLE: usize = 6;
-pub const I_MASK_JITTER: usize = 7;
-pub const I_NOISE_SCALE: usize = 8;
-pub const I_MASK_LAYER: usize = 9;
-pub const I_MASK_CHANNEL: usize = 10;
-pub const I_MASK_INVERT: usize = 11;
+pub const I_MASK_INVERT: usize = 4;
+pub const I_MASK_ANGLE: usize = 5;
+pub const I_MASK_JITTER: usize = 6;
+pub const I_NOISE_SCALE: usize = 7;
+pub const I_MASK_LAYER: usize = 8;
+pub const I_MASK_CHANNEL: usize = 9;
 
-pub const I_PARTICLE_DENSITY: usize = 12;
-pub const I_PARTICLE_SIZE: usize = 13;
-pub const I_SIZE_RANDOM: usize = 14;
-pub const I_PARTICLE_SHAPE: usize = 15;
-pub const I_PIXEL_BLOCK: usize = 16;
+pub const I_PARTICLE_DENSITY: usize = 10;
+pub const I_PARTICLE_SIZE: usize = 11;
+pub const I_SIZE_RANDOM: usize = 12;
+pub const I_PARTICLE_SHAPE: usize = 13;
+pub const I_PIXEL_BLOCK: usize = 14;
 
-pub const I_WIND_ANGLE: usize = 17;
-pub const I_WIND_STRENGTH: usize = 18;
-pub const I_GRAVITY: usize = 19;
-pub const I_SCATTER: usize = 20;
-pub const I_TURBULENCE_AMP: usize = 21;
-pub const I_TURBULENCE_SCALE: usize = 22;
-pub const I_SPEED_RANDOM: usize = 23;
+pub const I_WIND_ANGLE: usize = 15;
+pub const I_WIND_STRENGTH: usize = 16;
+pub const I_GRAVITY: usize = 17;
+pub const I_SCATTER: usize = 18;
+pub const I_SPEED_RANDOM: usize = 19;
+pub const I_TURBULENCE_AMP: usize = 20;
+pub const I_TURBULENCE_SCALE: usize = 21;
+pub const I_TIME_EVOLVE: usize = 22;
 
-pub const I_FADE_OUT_CURVE: usize = 24;
-pub const I_SIZE_OVER_LIFE: usize = 25;
-pub const I_COLOR_FADE_ENABLE: usize = 26;
-pub const I_END_COLOR_R: usize = 27;
-pub const I_END_COLOR_G: usize = 28;
-pub const I_END_COLOR_B: usize = 29;
+pub const I_LIFETIME: usize = 23;
+pub const I_LIFE_RANDOM: usize = 24;
+pub const I_FADE_OUT_CURVE: usize = 25;
+pub const I_SIZE_OVER_LIFE: usize = 26;
+pub const I_COLOR_FADE_ENABLE: usize = 27;
+pub const I_END_COLOR_R: usize = 28;
+pub const I_END_COLOR_G: usize = 29;
+pub const I_END_COLOR_B: usize = 30;
 #[allow(dead_code)]
-pub const I_END_COLOR_A: usize = 30;
-pub const I_COLOR_FADE_MIX: usize = 31;
-pub const I_ADDITIVE_GLOW: usize = 32;
+pub const I_END_COLOR_A: usize = 31;
+pub const I_COLOR_FADE_MIX: usize = 32;
+pub const I_ADDITIVE_GLOW: usize = 33;
 
-pub const I_SEED: usize = 33;
-pub const I_TIME_EVOLVE: usize = 34;
+pub const I_SEED: usize = 34;
 pub const I_MIX: usize = 35;
 
 pub struct LayerImage {
@@ -83,46 +83,46 @@ pub fn manifest() -> serde_json::Value {
         "category": "MOS 视效",
         "version": "1.0.0",
         "author": "MOSSLS",
-        "description": "文字与图层粒子消散效果：支持 0-100% 消散进度与三种遮罩（线性遮罩、杂色遮罩、自定义图层遮罩），自动读取文字本像素或重叠区域真实颜色，提供「粒子生成」与「直接驱动像素分离」双模式，结合风力、重力、卷曲湍流与存活时间尺寸/透明度/颜色渐变自然消散。",
+        "description": "文字与图层粒子消散效果：支持 0–100% 消散进度与三种遮罩（线性、杂色、自定义图层），自动读取文字本像素或重叠像素颜色，提供「粒子生成」与「像素分离」双模式，结合风力、重力、湍流卷曲与存活时间尺寸/透明度/颜色渐变自然消散。",
         "params": [
-            {"id": "mode", "name": "消散模式", "type": "popup", "options": ["粒子生成", "像素分离"], "default": 0, "group": "消散"},
-            {"id": "progress", "name": "消散进度 %", "type": "slider", "default": 35, "min": 0, "max": 100, "decimals": 1, "group": "消散"},
-            {"id": "feather", "name": "过渡羽化 %", "type": "slider", "default": 18, "min": 0, "max": 80, "decimals": 1, "group": "消散"},
-            {"id": "lifetime", "name": "存活时间 %", "type": "slider", "default": 45, "min": 5, "max": 150, "decimals": 1, "group": "消散"},
-            {"id": "life_random", "name": "存活随机 %", "type": "slider", "default": 35, "min": 0, "max": 100, "decimals": 1, "group": "消散"},
+            {"id": "mode", "name": "消散模式", "type": "popup", "options": ["粒子生成", "像素分离"], "default": 0},
+            {"id": "progress", "name": "消散进度 %", "type": "slider", "default": 35, "min": 0, "max": 100, "decimals": 1},
+            {"id": "feather", "name": "过渡羽化 %", "type": "slider", "default": 18, "min": 0, "max": 80, "decimals": 1},
+            {"id": "mask_type", "name": "遮罩类型", "type": "popup", "options": ["线性遮罩", "杂色遮罩", "自定义遮罩"], "default": 0},
 
-            {"id": "mask_type", "name": "遮罩类型", "type": "popup", "options": ["线性遮罩", "杂色遮罩", "自定义遮罩"], "default": 0, "group": "遮罩"},
-            {"id": "mask_angle", "name": "线性角度", "type": "angle", "default": 0, "group": "遮罩"},
-            {"id": "mask_jitter", "name": "边缘噪点扰动 %", "type": "slider", "default": 15, "min": 0, "max": 100, "decimals": 1, "group": "遮罩"},
-            {"id": "noise_scale", "name": "杂色缩放", "type": "slider", "default": 80, "min": 10, "max": 400, "decimals": 1, "group": "遮罩"},
-            {"id": "mask_layer", "name": "自定义遮罩图层", "type": "layer", "group": "遮罩"},
-            {"id": "mask_channel", "name": "遮罩提取通道", "type": "popup", "options": ["亮度", "Alpha"], "default": 0, "group": "遮罩"},
             {"id": "mask_invert", "name": "反转遮罩", "type": "checkbox", "default": false, "group": "遮罩"},
+            {"id": "mask_angle", "name": "角度", "type": "angle", "default": 0, "group": "遮罩/线性"},
+            {"id": "mask_jitter", "name": "边缘扰动 %", "type": "slider", "default": 15, "min": 0, "max": 100, "decimals": 1, "group": "遮罩/线性"},
+            {"id": "noise_scale", "name": "缩放", "type": "slider", "default": 80, "min": 10, "max": 400, "decimals": 1, "group": "遮罩/杂色"},
+            {"id": "mask_layer", "name": "遮罩图层", "type": "layer", "group": "遮罩/自定义图层"},
+            {"id": "mask_channel", "name": "提取通道", "type": "popup", "options": ["亮度", "Alpha"], "default": 0, "group": "遮罩/自定义图层"},
 
-            {"id": "particle_density", "name": "粒子密度 %", "type": "slider", "default": 55, "min": 5, "max": 100, "decimals": 1, "group": "粒子与像素"},
-            {"id": "particle_size", "name": "粒子大小 px", "type": "slider", "default": 3.2, "min": 0.5, "max": 24, "sliderMax": 12, "decimals": 1, "group": "粒子与像素"},
-            {"id": "size_random", "name": "大小随机 %", "type": "slider", "default": 50, "min": 0, "max": 100, "decimals": 1, "group": "粒子与像素"},
-            {"id": "particle_shape", "name": "粒子形状", "type": "popup", "options": ["柔和圆点", "锐利圆点", "方形碎屑", "风向拖尾"], "default": 0, "group": "粒子与像素"},
-            {"id": "pixel_block", "name": "像素块大小 px", "type": "slider", "default": 1, "min": 1, "max": 16, "decimals": 0, "group": "粒子与像素"},
+            {"id": "particle_density", "name": "密度 %", "type": "slider", "default": 55, "min": 5, "max": 100, "decimals": 1, "group": "粒子与像素/粒子生成"},
+            {"id": "particle_size", "name": "大小 px", "type": "slider", "default": 3.2, "min": 0.5, "max": 24, "sliderMax": 12, "decimals": 1, "group": "粒子与像素/粒子生成"},
+            {"id": "size_random", "name": "大小随机 %", "type": "slider", "default": 50, "min": 0, "max": 100, "decimals": 1, "group": "粒子与像素/粒子生成"},
+            {"id": "particle_shape", "name": "形状", "type": "popup", "options": ["柔和圆点", "锐利圆点", "方形碎屑", "风向拖尾"], "default": 0, "group": "粒子与像素/粒子生成"},
+            {"id": "pixel_block", "name": "像素块 px", "type": "slider", "default": 1, "min": 1, "max": 16, "decimals": 0, "integer": true, "group": "粒子与像素/像素分离"},
 
             {"id": "wind_angle", "name": "风向角度", "type": "angle", "default": -15, "group": "风场与物理"},
             {"id": "wind_strength", "name": "风力强度 px", "type": "slider", "default": 160, "min": 0, "max": 800, "sliderMax": 400, "decimals": 1, "group": "风场与物理"},
             {"id": "gravity", "name": "重力 / 浮力 px", "type": "slider", "default": -25, "min": -400, "max": 400, "sliderMin": -200, "sliderMax": 200, "decimals": 1, "group": "风场与物理"},
             {"id": "scatter", "name": "随机爆散 px", "type": "slider", "default": 45, "min": 0, "max": 400, "sliderMax": 200, "decimals": 1, "group": "风场与物理"},
-            {"id": "turbulence_amp", "name": "湍流卷曲强度 px", "type": "slider", "default": 55, "min": 0, "max": 300, "sliderMax": 150, "decimals": 1, "group": "风场与物理"},
-            {"id": "turbulence_scale", "name": "湍流尺度", "type": "slider", "default": 75, "min": 15, "max": 300, "decimals": 1, "group": "风场与物理"},
             {"id": "speed_random", "name": "速度随机 %", "type": "slider", "default": 45, "min": 0, "max": 100, "decimals": 1, "group": "风场与物理"},
+            {"id": "turbulence_amp", "name": "强度 px", "type": "slider", "default": 55, "min": 0, "max": 300, "sliderMax": 150, "decimals": 1, "group": "风场与物理/湍流卷曲"},
+            {"id": "turbulence_scale", "name": "尺度", "type": "slider", "default": 75, "min": 15, "max": 300, "decimals": 1, "group": "风场与物理/湍流卷曲"},
+            {"id": "time_evolve", "name": "时间演化", "type": "slider", "default": 20, "min": 0, "max": 200, "decimals": 1, "group": "风场与物理/湍流卷曲"},
 
-            {"id": "fade_out_curve", "name": "消散淡出曲线", "type": "popup", "options": ["平滑淡出", "线性淡出", "快速燃尽", "尾端保留"], "default": 0, "group": "渐变与色彩"},
-            {"id": "size_over_life", "name": "尾端尺寸缩放 %", "type": "slider", "default": 25, "min": 0, "max": 250, "decimals": 1, "group": "渐变与色彩"},
-            {"id": "color_fade_enable", "name": "启用尾端变色", "type": "checkbox", "default": false, "group": "渐变与色彩"},
-            {"id": "end_color", "name": "尾端颜色", "type": "color", "default": [1.0, 0.55, 0.2, 1.0], "group": "渐变与色彩"},
-            {"id": "color_fade_mix", "name": "变色强度 %", "type": "slider", "default": 75, "min": 0, "max": 100, "decimals": 1, "group": "渐变与色彩"},
-            {"id": "additive_glow", "name": "发光叠加 %", "type": "slider", "default": 0, "min": 0, "max": 100, "decimals": 1, "group": "渐变与色彩"},
+            {"id": "lifetime", "name": "存活时间 %", "type": "slider", "default": 45, "min": 5, "max": 150, "decimals": 1, "group": "寿命与渐变"},
+            {"id": "life_random", "name": "存活随机 %", "type": "slider", "default": 35, "min": 0, "max": 100, "decimals": 1, "group": "寿命与渐变"},
+            {"id": "fade_out_curve", "name": "淡出曲线", "type": "popup", "options": ["平滑淡出", "线性淡出", "快速燃尽", "尾端保留"], "default": 0, "group": "寿命与渐变"},
+            {"id": "size_over_life", "name": "尾端尺寸 %", "type": "slider", "default": 25, "min": 0, "max": 250, "decimals": 1, "group": "寿命与渐变"},
+            {"id": "color_fade_enable", "name": "启用变色", "type": "checkbox", "default": false, "group": "寿命与渐变/尾端色彩"},
+            {"id": "end_color", "name": "尾端颜色", "type": "color", "default": [1.0, 0.55, 0.2, 1.0], "group": "寿命与渐变/尾端色彩"},
+            {"id": "color_fade_mix", "name": "变色强度 %", "type": "slider", "default": 75, "min": 0, "max": 100, "decimals": 1, "group": "寿命与渐变/尾端色彩"},
+            {"id": "additive_glow", "name": "发光叠加 %", "type": "slider", "default": 0, "min": 0, "max": 100, "decimals": 1, "group": "寿命与渐变/尾端色彩"},
 
-            {"id": "seed", "name": "随机种子", "type": "slider", "default": 1, "min": 0, "max": 1000, "sliderMax": 100, "decimals": 0, "group": "输出"},
-            {"id": "time_evolve", "name": "风场时间演化", "type": "slider", "default": 20, "min": 0, "max": 200, "decimals": 1, "group": "输出"},
-            {"id": "mix", "name": "混合 %", "type": "slider", "default": 100, "min": 0, "max": 100, "decimals": 0, "group": "输出"}
+            {"id": "seed", "name": "随机种子", "type": "slider", "default": 1, "min": 0, "max": 1000, "sliderMax": 100, "decimals": 0, "integer": true, "group": "输出"},
+            {"id": "mix", "name": "混合 %", "type": "slider", "default": 100, "min": 0, "max": 100, "decimals": 0, "integer": true, "group": "输出"}
         ]
     })
 }

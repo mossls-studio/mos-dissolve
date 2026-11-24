@@ -8,85 +8,91 @@
     "en": "mos_dissolve"
   },
   "description": {
-    "zh": "文字与图层粒子消散效果：支持 0-100% 消散进度与三种遮罩（线性遮罩、杂色遮罩、自定义图层遮罩），自动读取文字本像素或重叠区域真实颜色，提供「粒子生成」与「直接驱动像素分离」双模式，结合风力、重力、卷曲湍流与存活时间尺寸/透明度/颜色渐变自然消散。",
-    "en": "Text & layer particle dissolve: 0-100% progress driven by Linear, Noise, or Custom Layer masks, sampling source pixel colors with dual modes (Particle Emit & Direct Pixel Separation), wind, gravity, curl turbulence, and lifetime size/opacity/color gradients."
+    "zh": "文字与图层粒子消散效果：支持 0–100% 消散进度与三种遮罩（线性、杂色、自定义图层），自动读取文字本像素或重叠像素颜色，提供「粒子生成」与「像素分离」双模式，结合风力、重力、湍流卷曲与存活时间尺寸/透明度/颜色渐变自然消散。",
+    "en": "Text & layer particle dissolve: 0–100% progress driven by Linear, Noise, or Custom Layer masks, sampling source pixel colors with Particle Emit and Direct Pixel Separation modes, wind, gravity, curl turbulence, and lifetime gradients."
   },
   "groups": {
-    "消散": { "zh": "消散", "en": "Dissolve" },
     "遮罩": { "zh": "遮罩", "en": "Mask" },
+    "线性": { "zh": "线性", "en": "Linear" },
+    "杂色": { "zh": "杂色", "en": "Noise" },
+    "自定义图层": { "zh": "自定义图层", "en": "Custom Layer" },
     "粒子与像素": { "zh": "粒子与像素", "en": "Particles & Pixels" },
+    "粒子生成": { "zh": "粒子生成", "en": "Particle Emit" },
+    "像素分离": { "zh": "像素分离", "en": "Pixel Separation" },
     "风场与物理": { "zh": "风场与物理", "en": "Wind & Physics" },
-    "渐变与色彩": { "zh": "渐变与色彩", "en": "Lifetime & Color" },
+    "湍流卷曲": { "zh": "湍流卷曲", "en": "Curl Turbulence" },
+    "寿命与渐变": { "zh": "寿命与渐变", "en": "Lifetime & Fade" },
+    "尾端色彩": { "zh": "尾端色彩", "en": "End Color" },
     "输出": { "zh": "输出", "en": "Output" }
   },
   "params": {
     "mode": {
-      "name": { "zh": "消散模式", "en": "Dissolve mode" },
+      "name": { "zh": "消散模式", "en": "Mode" },
       "options": {
         "zh": ["粒子生成", "像素分离"],
-        "en": ["Particle emit", "Pixel separation"]
+        "en": ["Particle Emit", "Pixel Separation"]
       }
     },
     "progress": { "name": { "zh": "消散进度 %", "en": "Progress %" } },
-    "feather": { "name": { "zh": "过渡羽化 %", "en": "Transition feather %" } },
-    "lifetime": { "name": { "zh": "存活时间 %", "en": "Lifetime %" } },
-    "life_random": { "name": { "zh": "存活随机 %", "en": "Lifetime random %" } },
-
+    "feather": { "name": { "zh": "过渡羽化 %", "en": "Feather %" } },
     "mask_type": {
-      "name": { "zh": "遮罩类型", "en": "Mask type" },
+      "name": { "zh": "遮罩类型", "en": "Mask Type" },
       "options": {
         "zh": ["线性遮罩", "杂色遮罩", "自定义遮罩"],
-        "en": ["Linear mask", "Noise mask", "Custom layer mask"]
+        "en": ["Linear", "Noise", "Custom Layer"]
       }
     },
-    "mask_angle": { "name": { "zh": "线性角度", "en": "Linear angle" } },
-    "mask_jitter": { "name": { "zh": "边缘噪点扰动 %", "en": "Edge noise jitter %" } },
-    "noise_scale": { "name": { "zh": "杂色缩放", "en": "Noise scale" } },
-    "mask_layer": { "name": { "zh": "自定义遮罩图层", "en": "Custom mask layer" } },
+
+    "mask_invert": { "name": { "zh": "反转遮罩", "en": "Invert Mask" } },
+    "mask_angle": { "name": { "zh": "角度", "en": "Angle" } },
+    "mask_jitter": { "name": { "zh": "边缘扰动 %", "en": "Edge Jitter %" } },
+    "noise_scale": { "name": { "zh": "缩放", "en": "Scale" } },
+    "mask_layer": { "name": { "zh": "遮罩图层", "en": "Mask Layer" } },
     "mask_channel": {
-      "name": { "zh": "遮罩提取通道", "en": "Mask channel" },
+      "name": { "zh": "提取通道", "en": "Channel" },
       "options": {
         "zh": ["亮度", "Alpha"],
         "en": ["Luminance", "Alpha"]
       }
     },
-    "mask_invert": { "name": { "zh": "反转遮罩", "en": "Invert mask" } },
 
-    "particle_density": { "name": { "zh": "粒子密度 %", "en": "Particle density %" } },
-    "particle_size": { "name": { "zh": "粒子大小 px", "en": "Particle size px" } },
-    "size_random": { "name": { "zh": "大小随机 %", "en": "Size random %" } },
+    "particle_density": { "name": { "zh": "密度 %", "en": "Density %" } },
+    "particle_size": { "name": { "zh": "大小 px", "en": "Size px" } },
+    "size_random": { "name": { "zh": "大小随机 %", "en": "Size Random %" } },
     "particle_shape": {
-      "name": { "zh": "粒子形状", "en": "Particle shape" },
+      "name": { "zh": "形状", "en": "Shape" },
       "options": {
         "zh": ["柔和圆点", "锐利圆点", "方形碎屑", "风向拖尾"],
-        "en": ["Soft circle", "Hard circle", "Square flake", "Velocity streak"]
+        "en": ["Soft Circle", "Hard Circle", "Square Flake", "Velocity Streak"]
       }
     },
-    "pixel_block": { "name": { "zh": "像素块大小 px", "en": "Pixel block size px" } },
+    "pixel_block": { "name": { "zh": "像素块 px", "en": "Block Size px" } },
 
-    "wind_angle": { "name": { "zh": "风向角度", "en": "Wind angle" } },
-    "wind_strength": { "name": { "zh": "风力强度 px", "en": "Wind strength px" } },
-    "gravity": { "name": { "zh": "重力 / 浮力 px", "en": "Gravity / Buoyancy px" } },
-    "scatter": { "name": { "zh": "随机爆散 px", "en": "Random scatter px" } },
-    "turbulence_amp": { "name": { "zh": "湍流卷曲强度 px", "en": "Turbulence amplitude px" } },
-    "turbulence_scale": { "name": { "zh": "湍流尺度", "en": "Turbulence scale" } },
-    "speed_random": { "name": { "zh": "速度随机 %", "en": "Speed random %" } },
+    "wind_angle": { "name": { "zh": "风向角度", "en": "Wind Angle" } },
+    "wind_strength": { "name": { "zh": "风力强度 px", "en": "Wind Strength px" } },
+    "gravity": { "name": { "zh": "重力 / 浮力 px", "en": "Gravity px" } },
+    "scatter": { "name": { "zh": "随机爆散 px", "en": "Scatter px" } },
+    "speed_random": { "name": { "zh": "速度随机 %", "en": "Speed Random %" } },
+    "turbulence_amp": { "name": { "zh": "强度 px", "en": "Amplitude px" } },
+    "turbulence_scale": { "name": { "zh": "尺度", "en": "Scale" } },
+    "time_evolve": { "name": { "zh": "时间演化", "en": "Evolution" } },
 
+    "lifetime": { "name": { "zh": "存活时间 %", "en": "Lifetime %" } },
+    "life_random": { "name": { "zh": "存活随机 %", "en": "Life Random %" } },
     "fade_out_curve": {
-      "name": { "zh": "消散淡出曲线", "en": "Fade-out curve" },
+      "name": { "zh": "淡出曲线", "en": "Fade Curve" },
       "options": {
         "zh": ["平滑淡出", "线性淡出", "快速燃尽", "尾端保留"],
-        "en": ["Smooth fade", "Linear fade", "Fast burn", "Late fade"]
+        "en": ["Smooth", "Linear", "Fast Burn", "Late Fade"]
       }
     },
-    "size_over_life": { "name": { "zh": "尾端尺寸缩放 %", "en": "End size scale %" } },
-    "color_fade_enable": { "name": { "zh": "启用尾端变色", "en": "Enable end color fade" } },
-    "end_color": { "name": { "zh": "尾端颜色", "en": "End color" } },
-    "color_fade_mix": { "name": { "zh": "变色强度 %", "en": "Color fade mix %" } },
-    "additive_glow": { "name": { "zh": "发光叠加 %", "en": "Additive glow %" } },
+    "size_over_life": { "name": { "zh": "尾端尺寸 %", "en": "End Size %" } },
+    "color_fade_enable": { "name": { "zh": "启用变色", "en": "Enable" } },
+    "end_color": { "name": { "zh": "尾端颜色", "en": "Color" } },
+    "color_fade_mix": { "name": { "zh": "变色强度 %", "en": "Mix %" } },
+    "additive_glow": { "name": { "zh": "发光叠加 %", "en": "Additive Glow %" } },
 
-    "seed": { "name": { "zh": "随机种子", "en": "Random seed" } },
-    "time_evolve": { "name": { "zh": "风场时间演化", "en": "Wind time evolution" } },
+    "seed": { "name": { "zh": "随机种子", "en": "Random Seed" } },
     "mix": { "name": { "zh": "混合 %", "en": "Mix %" } }
   }
 }

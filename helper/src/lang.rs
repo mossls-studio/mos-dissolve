@@ -152,17 +152,30 @@ pub fn localize_manifest(manifest: &mut Value) {
     };
 
     for param in list.iter_mut() {
-        if let Some(group_key) = param
+        if let Some(group_path) = param
             .get("group")
             .and_then(|v| v.as_str())
+            .filter(|s| !s.is_empty())
             .map(str::to_owned)
         {
-            if let Some(g) = groups
-                .and_then(|gm| gm.get(&group_key))
+            // Support both full-path overrides ("A/B") and per-segment localization ("A" + "/" + "B").
+            let localized = groups
+                .and_then(|gm| gm.get(&group_path))
                 .and_then(|v| pick(v, params))
-            {
-                param["group"] = Value::String(g.to_owned());
-            }
+                .map(str::to_owned)
+                .unwrap_or_else(|| {
+                    group_path
+                        .split('/')
+                        .map(|seg| {
+                            groups
+                                .and_then(|gm| gm.get(seg))
+                                .and_then(|v| pick(v, params))
+                                .unwrap_or(seg)
+                        })
+                        .collect::<Vec<_>>()
+                        .join("/")
+                });
+            param["group"] = Value::String(localized);
         }
 
         let Some(id) = param.get("id").and_then(|v| v.as_str()).map(str::to_owned) else {
